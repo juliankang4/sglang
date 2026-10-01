@@ -1410,6 +1410,11 @@ class Qwen4ExpPLELayer(nn.Module):
 
 
 class Qwen4ExpLayerExtensionMixin:
+    # These layers drop the stage boundaries they inherit, so their FFN
+    # completes its own output's sum (or leaves it to the reduce-scatter in
+    # _run_qwen4_exp_mlp under mlp_reduce_scatter).
+    _ffn_sums_itself = True
+
     def _init_qwen4_exp_layer_extensions(
         self,
         config: Qwen4ExpTextConfig,
